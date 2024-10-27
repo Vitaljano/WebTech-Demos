@@ -1,0 +1,96 @@
+@property --int {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 6;
+}
+
+@property --hgt {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes open {
+  to {
+    --int: 0;
+    --hgt: 60px;
+  }
+}
+
+@keyframes close {
+  to {
+    --int: 6;
+    --hgt: 0px;
+  }
+}
+
+.items-container {
+  display: grid;
+  /* width: 400px; */
+  /* calc is used for safary browser support*/
+  grid-template-rows: repeat(calc(var(--int)), var(--hgt));
+  transition: row-gap 0.3s 0.1s cubic-bezier(0.8, 0.5, 0.2, 1.4);
+
+  .items {
+    padding-inline: 20px;
+    border-radius: 10px;
+    background: linear-gradient(to right, rgb(220 223 235), rgb(212 232 242));
+    box-shadow: 0 0 4px rgb(164 173 204);
+    font: 1rem/60px "poppins";
+
+    &:is(label) {
+      font-size: 1.1rem;
+    }
+  }
+
+  .open {
+    color: black !important;
+  }
+
+  input {
+    appearance: none;
+  }
+  label {
+    cursor: pointer;
+  }
+
+  &:has(.open :checked) {
+    animation: open 0.3s ease-in-out forwards;
+    row-gap: 10px;
+    .items {
+      color: rgb(113 24 200);
+      transition: color 0.3s 0.1s;
+    }
+    .open {
+      display: none;
+    }
+    .close {
+      color: black;
+    }
+  }
+
+  &:has(.close :checked) {
+    /* close action */
+    --int: 0;
+    --hgt: 60px;
+    animation: close 0.3s ease-in-out forwards;
+
+    row-gap: 0;
+    .items {
+      color: transparent;
+      transition: color 0.2s;
+    }
+  }
+}
+
+body {
+  /* body style for demo purposes */
+  height: 100vh;
+  display: grid;
+
+  place-content: center;
+  margin: 0;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
